@@ -9,15 +9,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Interactive form sumbission for contact and orders
+    // Handle Order Form File UI
     const orderForm = document.getElementById('orderForm');
-    if(orderForm) {
-        orderForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Order Details Submitted Successfully! Start Customizing Your Design!');
+    const artworkInput = document.getElementById('artworkInput');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    // Make the fake file upload box clickable
+    const uploadBox = orderForm ? orderForm.querySelector('div.border-dashed') : null;
+    if (uploadBox && artworkInput && fileNameDisplay) {
+        uploadBox.addEventListener('click', () => artworkInput.click());
+        artworkInput.addEventListener('change', () => {
+            if (artworkInput.files.length > 0) {
+                fileNameDisplay.innerText = "Selected File: " + artworkInput.files[0].name;
+                fileNameDisplay.classList.remove('hidden');
+            }
         });
     }
-    
+
     // Intersection Observer for fade-in animations on scroll
     const fadeElements = document.querySelectorAll('.fade-in');
     const observer = new IntersectionObserver((entries) => {
