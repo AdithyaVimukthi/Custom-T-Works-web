@@ -59,17 +59,17 @@ body {
 
 /* Neon Glow effects for buttons/accents */
 .neon-glow {
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); /* sky-400 glow */
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.5); /* orange glow */
     transition: box-shadow 0.3s ease;
 }
 
 .neon-glow:hover {
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.8);
 }
 
 /* Gradient Texts */
 .text-gradient {
-    background: linear-gradient(to right, #38bdf8, #818cf8);
+    background: linear-gradient(to right, #f97316, #ea580c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
