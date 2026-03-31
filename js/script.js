@@ -133,4 +133,51 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Google Sheets Reviews Integration
+    const reviewsContainer = document.getElementById('reviews-container');
+    if (reviewsContainer) {
+        const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQAyiWWpWPOOChgSeVjoRU_83FH9_bAc7r0tLLwjP5jvukPui1h-DgunQFUkTZjqZNl-NgSYOd1dE0O/pub?output=csv";
+
+        fetch(sheetCsvUrl)
+            .then(response => response.text())
+            .then(csvText => {
+                const rows = csvText.split('\n').slice(1); // Skip header
+                if (rows.length === 0 || (rows.length === 1 && rows[0].trim() === "")) return;
+
+                // Clear static reviews if we have dynamic ones
+                reviewsContainer.innerHTML = '';
+
+                rows.forEach(row => {
+                    const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // Split CSV but ignore commas inside quotes
+                    if (columns.length < 2) return;
+
+                    const name = columns[0].replace(/"/g, '').trim();
+                    const review = columns[1].replace(/"/g, '').trim();
+                    const platform = columns[2] ? columns[2].replace(/"/g, '').trim() : 'Customer Feedback';
+                    const initial = name.charAt(0).toUpperCase();
+
+                    const reviewHtml = `
+                        <div class="glass p-8 rounded-3xl border border-slate-700/50 relative fade-in opacity-0 translate-y-10 transition-all duration-700">
+                            <p class="text-slate-300 text-lg italic mb-6 leading-relaxed">"${review}"</p>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-xl font-bold text-primary">
+                                    ${initial}
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold outfit-font">${name}</h4>
+                                    <span class="text-sm text-slate-500">${platform}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    reviewsContainer.insertAdjacentHTML('beforeend', reviewHtml);
+                });
+
+                // Trigger observer for new reviews
+                const newReviewElements = reviewsContainer.querySelectorAll('.fade-in');
+                newReviewElements.forEach(el => observer.observe(el));
+            })
+            .catch(err => console.error('Error fetching reviews:', err));
+    }
+
 });
